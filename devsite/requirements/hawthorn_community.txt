@@ -75,6 +75,7 @@ pytest==3.6.2
 pytest-django==3.1.2
 pytest-mock==1.7.1
 pytest-pythonpath==0.7.2
+pytest-capturelog==0.7
 pytest-cov==2.6.0
 # To address: tox 3.14.2 requires pluggy<1,>=0.12.0, but you'll have pluggy 0.6.0 which is incompatible.
 tox==3.1.0

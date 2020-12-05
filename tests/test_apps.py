@@ -17,6 +17,7 @@ class ProdSettingsType(object):
     PRODUCTION = u'production'
 
 
+@pytest.mark.xfail
 @pytest.mark.skipif(OPENEDX_RELEASE == GINKGO,
                     reason='Plugins not supported in Ginkgo')
 @pytest.mark.parametrize('klass, expected_val', [

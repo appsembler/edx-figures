@@ -4,7 +4,8 @@ TODO: Create a base "SiteModel" or a "SiteModelMixin"
 """
 
 from __future__ import absolute_import
-from datetime import date
+from datetime import date, datetime
+import six
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -188,6 +189,65 @@ class SiteMonthlyMetrics(TimeStampedModel):
         return SiteMonthlyMetrics.objects.update_or_create(site=site,
                                                            month_for=month_for,
                                                            defaults=defaults)
+
+
+class CourseMonthlyActiveUserManager(models.Manager):
+
+    # Temporarily remarked out code. Will implement in MAU 2G part 2
+    # def months_back_counts_for_site(self, site, months_back):
+    #     """
+    #     Let's rename this function
+    #     """
+    #     qs = self.filter(site=site)
+    #     return qs
+
+    def add_mau(self, site_id, course_id, user_id, date_for=None, overwrite=False):
+        """
+        We use 'date_for' instead of 'month_for' to enforce the day of month for
+        the 'month_for' field
+        """
+        if date_for:
+            month_for = date(year=date_for.year, month=date_for.month, day=1)
+        else:
+            today = datetime.utcnow()
+            month_for = date(year=today.year, month=today.month, day=1)
+        if not overwrite:
+            try:
+                obj = self.get(
+                    site_id=site_id,
+                    course_id=six.text_type(course_id),  # noqa: F821
+                    user_id=user_id,
+                    month_for=month_for)
+                return (obj, False)
+            except CourseMonthlyActiveUser.DoesNotExist:
+                pass
+
+        return self.update_or_create(
+            site_id=site_id,
+            course_id=six.text_type(course_id),  # noqa: F821
+            user_id=user_id,
+            month_for=month_for)
+
+
+@python_2_unicode_compatible
+class CourseMonthlyActiveUser(TimeStampedModel):
+    """Capture learner activity for a given course and month
+
+    """
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    course_id = models.CharField(max_length=255, db_index=True)
+    month_for = models.DateField(db_index=True)
+
+    objects = CourseMonthlyActiveUserManager()
+
+    class Meta:
+        ordering = ['-month_for', 'site', 'course_id']
+        unique_together = ['site', 'course_id', 'user', 'month_for']
+
+    def __str__(self):
+        return "id:{}, site:{} course_id:{} user:{} month_for:{},".format(
+            self.id, self.site.domain, self.course_id, self.user.username, self.month_for)
 
 
 class LearnerCourseGradeMetricsManager(models.Manager):

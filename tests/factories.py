@@ -38,6 +38,7 @@ from figures.helpers import as_course_key
 from figures.models import (
     CourseDailyMetrics,
     CourseMauMetrics,
+    CourseMonthlyActiveUser,
     LearnerCourseGradeMetrics,
     SiteDailyMetrics,
     SiteMonthlyMetrics,
@@ -363,6 +364,20 @@ class SiteMauMetricsFactory(DjangoModelFactory):
         datetime.datetime(2018, 1, 1) + datetime.timedelta(days=n)).replace(
             tzinfo=utc).date())
     mau = factory.Sequence(lambda n: n*10)
+
+
+class CourseMonthlyActiveUserFactory(DjangoModelFactory):
+    """
+    We might not need this
+    """
+    class Meta:
+        model = CourseMonthlyActiveUser
+    site = factory.SubFactory(SiteFactory)
+    month_for = factory.Sequence(lambda n: (
+        datetime.date(2020, 6, 1) - relativedelta(months=n)))
+    course_id = factory.Sequence(lambda n:
+        'course-v1:StarFleetAcademy+SFA{}+2161'.format(n))
+    user = factory.SubFactory(UserFactory)
 
 
 class CourseUserGroupFactory(DjangoModelFactory):

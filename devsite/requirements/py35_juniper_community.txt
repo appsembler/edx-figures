@@ -35,6 +35,12 @@ django-environ==0.4.5
 
 jsonfield==2.1.1
 
+# Support Django signals model event to get the request object
+django-crum==0.7.6
+
+# For Figures devsite to behave more like the platform for site handling
+edx-django-sites-extensions==2.5.1
+
 ##
 ## Documentation (Sphinx) dependencies
 ##

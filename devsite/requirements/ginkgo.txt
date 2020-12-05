@@ -39,6 +39,12 @@ django-environ==0.4.5
 django-celery==3.2.1
 jsonfield==1.0.3  # Version used in Ginkgo. Hawthorn uses version 2.0.2
 
+# Support Django signals model event to get the request object
+django-crum==0.5
+
+# For Figures devsite to behave more like the platform for site handling
+edx-django-sites-extensions==2.3.1
+
 ##
 ## Documentation (Sphinx) dependencies
 ##

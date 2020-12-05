@@ -113,3 +113,15 @@ class CourseMauMetricsAdmin(admin.ModelAdmin):
         ('site', RelatedOnlyDropdownFilter),
         ('course_id', AllValuesDropdownFilter),
         'date_for')
+
+
+@admin.register(figures.models.CourseMonthlyActiveUser)
+class CourseMonthlyActiveUserAdmin(admin.ModelAdmin):
+    """Defines the admin interface for the CourseMonthlyActiveUser model
+    """
+    list_display = ('id', 'site', 'course_id', 'user', 'month_for')
+    list_filter = (
+        ('site', RelatedOnlyDropdownFilter),
+        ('course_id', AllValuesDropdownFilter),
+        ('user', RelatedOnlyFieldListFilter),
+        'month_for')

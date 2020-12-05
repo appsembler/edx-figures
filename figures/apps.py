@@ -58,3 +58,6 @@ class FiguresConfig(AppConfig):
                 }
             },
         }
+
+    def ready(self):
+        import figures.signals  # noqa pylint: disable=unused-variable

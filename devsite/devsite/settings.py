@@ -92,7 +92,7 @@ if ENABLE_DEVSITE_CELERY:
 # certificates app
 if OPENEDX_RELEASE == 'GINKGO':
     INSTALLED_APPS.append('certificates')
-    INSTALLED_APPS.append('courseware')
+    INSTALLED_APPS.append('lms.djangoapps.courseware')
 elif OPENEDX_RELEASE == 'HAWTHORN':
     INSTALLED_APPS.append('lms.djangoapps.certificates')
     INSTALLED_APPS.append('courseware')
